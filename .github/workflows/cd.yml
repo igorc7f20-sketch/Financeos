@@ -1,0 +1,49 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  # ─── Deploy (triggered only after CI passes) ───────────────────────────────
+  deploy:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log deploy info
+        run: |
+          echo "Deploying commit ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+
+      # ── Uncomment and configure when your hosting is ready ──────────────────
+      #
+      # Option A: Railway
+      # - name: Deploy to Railway
+      #   uses: bervProject/railway-deploy@main
+      #   with:
+      #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      #     service: financeos-backend
+      #
+      # Option B: Render
+      # - name: Deploy to Render
+      #   run: |
+      #     curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      #
+      # Option C: VPS via SSH
+      # - name: Deploy via SSH
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: ${{ secrets.VPS_HOST }}
+      #     username: ${{ secrets.VPS_USER }}
+      #     key: ${{ secrets.VPS_SSH_KEY }}
+      #     script: |
+      #       cd /srv/financeos
+      #       git pull origin main
+      #       docker-compose -f docker-compose.prod.yml up -d --build
+
+      - name: Deploy placeholder
+        run: echo "✅ CD pipeline ready — configure your hosting above."
