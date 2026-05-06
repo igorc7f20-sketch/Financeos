@@ -21,11 +21,11 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     @extend_schema(
-            request=RegisterSerializer, 
-            responses={201: UserProfileSerializer},
-            summary="Register a new user",
-            tags=["Auth"],
-        )
+        request=RegisterSerializer,
+        responses={201: UserProfileSerializer},
+        summary="Register a new user",
+        tags=["Auth"],
+    )
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -34,51 +34,43 @@ class RegisterView(APIView):
             user = UserService.regiter(**serializer.validated_data)
         except ServiceException as e:
             return Response({"detail": e.message}, status=e.status_code)
-        
+
         return Response(
             UserProfileSerializer(user).data,
             status=status.HTTP_201_CREATED,
         )
-    
+
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-            responses={200: UserProfileSerializer},
-            summary="Get authenticated user's profile",
-            tags=["Users"],
-        )
+        responses={200: UserProfileSerializer},
+        summary="Get authenticated user's profile",
+        tags=["Users"],
+    )
     def get(self, request):
         try:
             user = UserService.get_profile(request.user)
         except ServiceException as e:
             return Response({"detail": e.message}, status=e.status_code)
-        
+
         return Response(UserProfileSerializer(user).data)
-    
+
 
 # JWT Views re-exported with Swagger tags
 class LoginView(TokenObtainPairView):
-    @extend_schema(
-        Summary="Login - obtain JWT tokens", 
-        tags=["Auth"]
-    )
+    @extend_schema(Summary="Login - obtain JWT tokens", tags=["Auth"])
     def get(self, request):
         try:
             user = UserService.get_profile(request.user)
         except ServiceException as e:
             return Response({"detail": e.message}, status=e.status_code)
-        
+
         return Response(UserProfileSerializer(user).data)
-    
+
 
 class RefreshTokenView(TokenRefreshView):
-    @extend_schema(
-        summary="Refresh access token", 
-        tags=["Auth"]
-    )
+    @extend_schema(summary="Refresh access token", tags=["Auth"])
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
-    
-

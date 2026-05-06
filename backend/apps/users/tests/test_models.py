@@ -6,9 +6,7 @@ from apps.users.models import User
 class TestUserModel:
     def test_create_user(self):
         user = User.objects.create_user(
-            email="test@email.com",
-            full_name="Test User",
-            password="strongpassword123"
+            email="test@email.com", full_name="Test User", password="strongpassword123"
         )
         assert user.email == "test@email.com"
         assert user.full_name == "Test User"
@@ -27,21 +25,15 @@ class TestUserModel:
 
     def test_email_is_unique(self):
         User.objects.create_user(
-            email="dup@email.com", 
-            full_name="A",
-            password="pass1234"
+            email="dup@email.com", full_name="A", password="pass1234"
         )
         with pytest.raises(Exception):
             User.objects.create_user(
-                email="dup@email.com", 
-                full_name="B",
-                password="pass1234"
+                email="dup@email.com", full_name="B", password="pass1234"
             )
-    
+
     def test_str_returns_email(self):
         user = User.objects.create_user(
-            email="str@email.com",
-            full_name="STR",
-            password="pass1234"
+            email="str@email.com", full_name="STR", password="pass1234"
         )
         assert str(user) == "str@email.com"

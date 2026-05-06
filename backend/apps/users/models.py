@@ -4,7 +4,12 @@ user model - Data Layer.
 Extends Django´s AbstractBaseUser for full control over
 the authentication model without coupling to business logic.
 """
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 
 
@@ -17,17 +22,18 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
     def create_superuser(self, email: str, password: str, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
-    
+
+
 class User(AbstractBaseUser, PermissionsMixin):
-    email      = models.EmailField(unique=True)
-    full_name  = models.CharField(max_length=150)
-    is_active  = models.BooleanField(default=True)
-    is_staff   = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+    full_name = models.CharField(max_length=150)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

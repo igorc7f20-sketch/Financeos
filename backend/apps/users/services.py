@@ -20,16 +20,14 @@ class UserService:
         """
         if UserRepository.email_exists(email):
             raise ServiceException("A user with this email already exists.")
-        
+
         if len(password) < 8:
             raise ServiceException("Password must be at least 8 characters long.")
-        
+
         return UserRepository.create_user(
-            email=email, 
-            full_name=full_name, 
-            password=password
+            email=email, full_name=full_name, password=password
         )
-    
+
     @staticmethod
     def get_profile(user: User) -> User:
         """

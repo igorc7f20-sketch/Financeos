@@ -3,6 +3,7 @@ class BaseRepository:
     Base repository class.
     All feature repositories extend this to share common query patterns.
     """
+
     model = None
 
     @classmethod

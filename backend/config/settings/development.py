@@ -8,7 +8,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOWED_CREDENTIALS = True
 
-#─── production.py ───────────────────────────────────────────────────────────
+# ─── production.py ───────────────────────────────────────────────────────────
 # backend/config/settings/production.py
 
 # from .base import *
