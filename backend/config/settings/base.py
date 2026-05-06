@@ -3,6 +3,7 @@ Base settings shared across all environments.
 """
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -120,8 +121,6 @@ REST_FRAMEWORK = {
 }
 
 # ─── JWT ─────────────────────────────────────────────────────────────────────
-
-from datetime import timedelta
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
