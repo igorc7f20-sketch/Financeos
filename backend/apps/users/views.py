@@ -60,7 +60,7 @@ class ProfileView(APIView):
 
 # JWT Views re-exported with Swagger tags
 class LoginView(TokenObtainPairView):
-    @extend_schema(Summary="Login - obtain JWT tokens", tags=["Auth"])
+    @extend_schema(summary="Login - obtain JWT tokens", tags=["Auth"])
     def get(self, request):
         try:
             user = UserService.get_profile(request.user)
