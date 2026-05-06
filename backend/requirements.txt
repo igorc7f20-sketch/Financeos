@@ -1,4 +1,19 @@
-cat > backend/requirements.txt << 'EOF'
+#cat > backend/requirements.txt << 'EOF'
+#Django==5.0.6
+#djangorestframework==3.15.2
+#djangorestframework-simplejwt==5.3.1
+#drf-spectacular==0.27.2
+#psycopg2-binary==2.9.9
+#python-decouple==3.8
+#django-cors-headers==4.4.0
+#pytest==8.2.2
+#pytest-django==4.8.1
+#factory-boy==3.3.0
+#flake8==7.1.0
+#black==24.4.2
+#EOF
+
+@"
 Django==5.0.6
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
@@ -11,4 +26,4 @@ pytest-django==4.8.1
 factory-boy==3.3.0
 flake8==7.1.0
 black==24.4.2
-EOF
+"@ | Out-File -FilePath backend/requirements.txt -Encoding utf8
