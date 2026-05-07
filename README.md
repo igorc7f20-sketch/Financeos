@@ -48,16 +48,21 @@ This project follows industry-standard engineering practices:
 
 ## ✨ Features
 
-### ✅ MVP — Layer 1 (Foundation)
+### ✅ Layer 1 — Foundation (completed)
 - [x] Project scaffold (Django + DRF + PostgreSQL + Docker)
-- [x] JWT Authentication (register, login, token refresh)
-- [x] CI/CD pipeline with GitHub Actions
-- [x] Swagger API documentation
+- [x] Custom User model with email-based authentication
+- [x] JWT Authentication (register, login, token refresh, profile)
+- [x] Feature-based layered architecture (model → repository → service → serializer → view)
+- [x] Core layers: pagination, exceptions, base repository, permissions
+- [x] Unit and integration tests — 90% coverage
+- [x] CI/CD pipeline with GitHub Actions (lint → test → docker build)
+- [x] Swagger / OpenAPI documentation
 
-### 🚧 Layer 2 — Core Finance
-- [ ] Transactions (income & expenses)
-- [ ] Custom categories and subcategories
-- [ ] Filtering, sorting, and pagination
+### 🚧 Layer 2 — Core Finance (in progress)
+- [ ] `Category` model with user ownership
+- [ ] `Transaction` model (income & expenses)
+- [ ] Full CRUD endpoints with filters, sorting, and pagination
+- [ ] Tests for all layers
 
 ### 📊 Layer 3 — Dashboard & Reports
 - [ ] Monthly summary (balance, income, expenses)
@@ -70,6 +75,7 @@ This project follows industry-standard engineering practices:
 - [ ] Financial goals with visual progress
 
 ### 🎨 Layer 5 — Polish
+- [ ] React frontend scaffold (Vite)
 - [ ] Dark / Light mode
 - [ ] Financial projections
 - [ ] Notifications system
@@ -393,11 +399,11 @@ Interactive Swagger UI available at `/api/docs/` when running locally.
 
 ## 🗺️ Roadmap
 
-- [x] **Layer 1** — Project scaffold, Auth, Docker, CI/CD
-- [ ] **Layer 2** — Transactions, Categories
+- [x] **Layer 1** — Project scaffold, Auth, Docker, CI/CD ✅
+- [ ] **Layer 2** — Transactions, Categories 🚧
 - [ ] **Layer 3** — Dashboard, Charts, Reports
 - [ ] **Layer 4** — Spending Rules, Goals, Alerts
-- [ ] **Layer 5** — Dark mode, Projections, Notifications
+- [ ] **Layer 5** — Frontend React, Dark mode, Projections
 
 ---
 
