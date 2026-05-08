@@ -5,7 +5,7 @@ All rules for creating, updating, and validating
 transactions and categories live here.
 """
 from decimal import Decimal
-from core.exception import ServiceException
+from core.exceptions import ServiceException
 from .models import Category, Transaction
 from .repositories import CategoryRepository, TransactionRepository
 
