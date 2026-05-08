@@ -26,7 +26,7 @@ class TestCategoryModel:
 @pytest.mark.django_db
 class TestTransactionModel:
     def test_create_transaction(self, user, expense_category):
-        txn = Transaction.objects.create(
+        tx = Transaction.objects.create(
             user=user,
             category=expense_category,
             title="Grocery",
@@ -34,9 +34,9 @@ class TestTransactionModel:
             type="expense",
             date=date.today(),
         )
-        assert txn.title == "Grocery"
-        assert txn.amount == Decimal("150.00")
-        assert txn.type == "expense"
+        assert tx.title == "Grocery"
+        assert tx.amount == Decimal("150.00")
+        assert tx.type == "expense"
         assert "Grocery" in str(tx)
 
     def test_category_null_on_delete(self, user, expense_category):
