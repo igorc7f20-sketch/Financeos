@@ -1,0 +1,71 @@
+import pytest
+from decimal import Decimal
+from datetime import date
+from core.exceptions import ServiceException
+from apps.transactions.services import CategoryService, TransactionService
+
+
+@pytest.mark.django_db
+class TestCategoryService:
+    def test_create_category(self, user):
+        cat = CategoryService.create(user, name="Food", type="expense")
+        assert cat.name == "Food"
+
+    def test_create_duplicate_raises(self, user):
+        CategoryService.create(user, name="Food", type="expense")
+        with pytest.raises(ServiceException):
+            CategoryService.create(user, name="Food", type="expense")
+
+    def test_delete_category(self, user, expense_category):
+        CategoryService.delete(user, expense_category.pk)
+        from apps.transactions.models import Category
+        assert not Category.objects.filter(pk=expense_category.pk).exists()
+
+    def test_delete_nonexistent_raises(self, user):
+        with pytest.raises(ServiceException):
+            CategoryService.delete(user, 9999)
+
+
+@pytest.mark.django_db
+class TestTransactionService:
+    def test_create_transaction(self, user, expense_category):
+        tx = TransactionService.create(user, {
+            "title": "Grocery",
+            "amount": Decimal("100.00"),
+            "type": "expense",
+            "date": date.today(),
+            "category_id": expense_category.pk,
+        })
+        assert tx.title == "Grocery"
+        assert tx.amount == Decimal("100.00")
+
+    def test_amount_must_be_positive(self, user):
+        with pytest.raises(ServiceException):
+            TransactionService.create(user, {
+                "title": "Bad", "amount": Decimal("-10"),
+                "type": "expense", "date": date.today(),
+            })
+
+    def test_category_type_mismatch_raises(self, user, income_category):
+        with pytest.raises(ServiceException):
+            TransactionService.create(user, {
+                "title": "Mismatch",
+                "amount": Decimal("50.00"),
+                "type": "expense",
+                "date": date.today(),
+                "category_id": income_category.pk,
+            })
+
+    def test_update_transaction(self, user, transaction):
+        updated = TransactionService.update(user, transaction.pk, {"title": "Updated"})
+        assert updated.title == "Updated"
+
+    def test_delete_transaction(self, user, transaction):
+        TransactionService.delete(user, transaction.pk)
+        from apps.transactions.models import Transaction
+        assert not Transaction.objects.filter(pk=transaction.pk).exists()
+
+    def test_get_nonexistent_raises(self, user):
+        with pytest.raises(ServiceException):
+            TransactionService.get(user, 9999)
+            
