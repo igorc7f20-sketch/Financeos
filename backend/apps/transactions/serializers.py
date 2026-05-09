@@ -24,7 +24,7 @@ class CategoryInputSerializer(serializers.Serializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_Only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Transaction
