@@ -15,7 +15,7 @@ class Category(models.Model):
         EXPENSE = "EXPENSE", "Expense"
 
     user = models.ForeignKey(
-        settings.Auth_USER_MODEL,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="categories",
     )
@@ -23,7 +23,7 @@ class Category(models.Model):
     type = models.CharField(max_length=10, choices=CategoryType.choices)
     color = models.CharField(max_length=7, default="#6366f1")  # Hex color
     icon = models.CharField(max_length=50, blank=True, default="")
-    created_at = models.DataTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "categories"
