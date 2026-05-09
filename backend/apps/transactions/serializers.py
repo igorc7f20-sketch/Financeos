@@ -4,6 +4,7 @@ Transaction Serializers - Content Layer.
 Input validation and output transformation only.
 No business rules here.
 """
+
 from rest_framework import serializers
 from .models import Category, Transaction
 
@@ -57,4 +58,4 @@ class TransactionFilterSerializer(serializers.Serializer):
     category_id = serializers.IntegerField(required=False)
     date_from = serializers.DateField(required=False)
     date_to = serializers.DateField(required=False)
-    search = serializers.CharField(required=False, allow_blank=True) 
+    search = serializers.CharField(required=False, allow_blank=True)

@@ -4,6 +4,7 @@ Transaction Repository - Data acess Layer.
 All database queries for transactions and categories live here.
 No business rules - only data access.
 """
+
 from typing import Optional
 from django.db.models import QuerySet
 from core.base_repository import BaseRepository
@@ -16,19 +17,19 @@ class CategoryRepository(BaseRepository):
     @classmethod
     def get_by_user(cls, user) -> QuerySet:
         return cls.model.objects.filter(user=user)
-    
+
     @classmethod
     def get_by_user_and_id(cls, user, pk: int) -> Optional[Category]:
         return cls.model.objects.filter(user=user, pk=pk).first()
-    
+
     @classmethod
     def exists_for_user(cls, user, **kwargs) -> Category:
         return cls.model.objects.create(user=user, **kwargs)
-    
+
     @classmethod
     def create_for_user(cls, user, **kwargs) -> Category:
         return cls.model.objects.create(user=user, **kwargs)
-    
+
 
 class TransactionRepository(BaseRepository):
     model = Transaction
@@ -38,7 +39,7 @@ class TransactionRepository(BaseRepository):
         qs = cls.model.objects.filter(user=user).select_related("category")
         if not filters:
             return qs
-        
+
         if filters.get("type"):
             qs = qs.filter(type=filters["type"])
         if filters.get("category_id"):
@@ -51,11 +52,15 @@ class TransactionRepository(BaseRepository):
             qs = qs.filter(title__icontains=filters["search"])
 
         return qs
-    
+
     @classmethod
     def get_by_user_and_id(cls, user, pk: int) -> Optional[Transaction]:
-        return cls.model.objects.filter(user=user, pk=pk).select_related("category").first()
-    
+        return (
+            cls.model.objects.filter(user=user, pk=pk)
+            .select_related("category")
+            .first()
+        )
+
     @classmethod
     def create_for_user(cls, user, **kwargs) -> Transaction:
         return cls.model.objects.create(user=user, **kwargs)

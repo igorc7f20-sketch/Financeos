@@ -1,5 +1,4 @@
 import pytest
-from decimal import Decimal
 from datetime import date
 
 
@@ -11,9 +10,14 @@ class TestCategoryViews:
         assert len(res.data) == 1
 
     def test_create_category(self, auth_client):
-        res = auth_client.post("/api/categories/", {
-            "name": "Transport", "type": "expense", "color": "#f59e0b",
-        })
+        res = auth_client.post(
+            "/api/categories/",
+            {
+                "name": "Transport",
+                "type": "expense",
+                "color": "#f59e0b",
+            },
+        )
         assert res.status_code == 201
         assert res.data["name"] == "Transport"
 
@@ -34,13 +38,16 @@ class TestTransactionViews:
         assert res.data["count"] == 1
 
     def test_create_transaction(self, auth_client, expense_category):
-        res = auth_client.post("/api/transactions/", {
-            "title": "Lunch",
-            "amount": "25.00",
-            "type": "expense",
-            "date": str(date.today()),
-            "category_id": expense_category.pk,
-        })
+        res = auth_client.post(
+            "/api/transactions/",
+            {
+                "title": "Lunch",
+                "amount": "25.00",
+                "type": "expense",
+                "date": str(date.today()),
+                "category_id": expense_category.pk,
+            },
+        )
         assert res.status_code == 201
         assert res.data["title"] == "Lunch"
 
@@ -50,12 +57,15 @@ class TestTransactionViews:
         assert res.data["title"] == "Grocery"
 
     def test_update_transaction(self, auth_client, transaction):
-        res = auth_client.put(f"/api/transactions/{transaction.pk}/", {
-            "title": "Supermarket",
-            "amount": "200.00",
-            "type": "expense",
-            "date": str(date.today()),
-        })
+        res = auth_client.put(
+            f"/api/transactions/{transaction.pk}/",
+            {
+                "title": "Supermarket",
+                "amount": "200.00",
+                "type": "expense",
+                "date": str(date.today()),
+            },
+        )
         assert res.status_code == 200
         assert res.data["title"] == "Supermarket"
 

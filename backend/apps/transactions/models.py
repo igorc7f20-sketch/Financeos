@@ -4,6 +4,7 @@ Transaction models - Data Layer.
 Category: groups transactions by type (food, salary, rent, etc.)
 Transaction: a single financial movement (income or expense).
 """
+
 from django.db import models
 from django.conf import settings
 
@@ -12,7 +13,7 @@ class Category(models.Model):
     class CategoryType(models.TextChoices):
         INCOME = "INCOME", "Income"
         EXPENSE = "EXPENSE", "Expense"
-    
+
     user = models.ForeignKey(
         settings.Auth_USER_MODEL,
         on_delete=models.CASCADE,
@@ -21,7 +22,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10, choices=CategoryType.choices)
     color = models.CharField(max_length=7, default="#6366f1")  # Hex color
-    icon = models.CharField(max_length=50, blank=True, default="") 
+    icon = models.CharField(max_length=50, blank=True, default="")
     created_at = models.DataTimeField(auto_now_add=True)
 
     class Meta:
@@ -31,7 +32,7 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.type})"
-    
+
 
 class Transaction(models.Model):
     class TransactionType(models.TextChoices):

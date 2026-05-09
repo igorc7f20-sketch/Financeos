@@ -11,7 +11,6 @@ from .repositories import UserRepository
 
 
 class UserService:
-
     @staticmethod
     def regiter(email: str, full_name: str, password: str) -> User:
         """

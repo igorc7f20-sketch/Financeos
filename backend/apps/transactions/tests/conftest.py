@@ -14,7 +14,7 @@ def client():
 @pytest.fixture
 def user(db):
     return User.objects.create_user(
-        email="user@email.com", 
+        email="user@email.com",
         full_name="Test User",
         password="securepass123",
     )
@@ -22,7 +22,9 @@ def user(db):
 
 @pytest.fixture
 def auth_client(client, user):
-    res = client.post("/api/auth/login/", {"email": "user@email.com", "password": "securepass123"})
+    res = client.post(
+        "/api/auth/login/", {"email": "user@email.com", "password": "securepass123"}
+    )
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {res.data['access']}")
     return client
 
