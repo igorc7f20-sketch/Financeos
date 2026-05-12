@@ -37,7 +37,7 @@ class TestTransactionService:
                 "type": "expense",
                 "date": date.today(),
                 "category_id": expense_category.pk,
-            }
+            },
         )
         assert tx.title == "Grocery"
         assert tx.amount == Decimal("100.00")
@@ -51,7 +51,7 @@ class TestTransactionService:
                     "amount": Decimal("-10"),
                     "type": "expense",
                     "date": date.today(),
-                }
+                },
             )
 
     def test_category_type_mismatch_raises(self, user, income_category):
@@ -64,7 +64,7 @@ class TestTransactionService:
                     "type": "expense",
                     "date": date.today(),
                     "category_id": income_category.pk,
-                }
+                },
             )
 
     def test_update_transaction(self, user, transaction):

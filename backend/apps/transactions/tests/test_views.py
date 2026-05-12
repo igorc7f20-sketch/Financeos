@@ -16,7 +16,7 @@ class TestCategoryViews:
                 "name": "Transport",
                 "type": "expense",
                 "color": "#f59e0b",
-            }
+            },
         )
         assert res.status_code == 201
         assert res.data["name"] == "Transport"
@@ -27,7 +27,7 @@ class TestCategoryViews:
             {
                 "name": "Food",
                 "type": "expense",
-            }
+            },
         )
         assert res.status_code == 400
 
@@ -60,7 +60,7 @@ class TestTransactionViews:
                 "type": "expense",
                 "date": str(date.today()),
                 "category_id": expense_category.pk,
-            }
+            },
         )
         assert res.status_code == 201
         assert res.data["title"] == "Lunch"
@@ -73,7 +73,7 @@ class TestTransactionViews:
                 "amount": "-10.00",
                 "type": "expense",
                 "date": str(date.today()),
-            }
+            },
         )
         assert res.status_code == 400
 
@@ -90,7 +90,7 @@ class TestTransactionViews:
                 "amount": "200.00",
                 "type": "expense",
                 "date": str(date.today()),
-            }
+            },
         )
         assert res.status_code == 200
         assert res.data["title"] == "Supermarket"
