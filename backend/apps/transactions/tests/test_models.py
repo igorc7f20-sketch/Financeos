@@ -1,6 +1,6 @@
-import pytest
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
+import pytest
 from apps.transactions.models import Category, Transaction
 
 
@@ -12,6 +12,7 @@ class TestCategoryModel:
             name="Food",
             type="expense",
         )
+
         assert cat.name == "Food"
         assert cat.type == "expense"
         assert cat.color == "#6366f1"
