@@ -98,15 +98,21 @@ class TestTransactionService:
         assert updated.title == "Updated"
 
     def test_update_transaction_amount(self, user, transaction):
-        updated = TransactionService.update(user, transaction.pk, {"amount": Decimal("200.00")})
+        updated = TransactionService.update(
+            user, transaction.pk, {"amount": Decimal("200.00")}
+        )
         assert updated.amount == Decimal("200.00")
 
     def test_update_transaction_negative_amount_raises(self, user, transaction):
         with pytest.raises(ServiceException):
-            TransactionService.update(user, transaction.pk, {"amount": Decimal("-10.00")})
+            TransactionService.update(
+                user, transaction.pk, {"amount": Decimal("-10.00")}
+            )
 
     def test_update_transaction_category(self, user, transaction, expense_category):
-        updated = TransactionService.update(user, transaction.pk, {"category_id": expense_category.pk})
+        updated = TransactionService.update(
+            user, transaction.pk, {"category_id": expense_category.pk}
+        )
         assert updated.category == expense_category
 
     def test_update_transaction_category_not_found_raises(self, user, transaction):
