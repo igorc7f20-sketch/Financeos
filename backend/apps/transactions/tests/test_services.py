@@ -13,15 +13,15 @@ class TestCategoryService:
         assert expense_category in categories
 
     def test_create_category(self, user):
-        cat = CategoryService.create(user, name="Food", type="expense")
+        cat = CategoryService.create(user, name="Food", type="EXPENSE")
         assert cat.name == "Food"
-        assert cat.type == "expense"
+        assert cat.type == "EXPENSE"
         assert cat.user == user
 
     def test_create_duplicate_raises(self, user):
-        CategoryService.create(user, name="Food", type="expense")
+        CategoryService.create(user, name="Food", type="EXPENSE")
         with pytest.raises(ServiceException):
-            CategoryService.create(user, name="Food", type="expense")
+            CategoryService.create(user, name="Food", type="EXPENSE")
 
     def test_delete_category(self, user, expense_category):
         CategoryService.delete(user, expense_category.pk)

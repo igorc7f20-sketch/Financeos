@@ -14,7 +14,7 @@ class TestCategoryViews:
             "/api/categories/",
             {
                 "name": "Transport",
-                "type": "expense",
+                "type": "EXPENSE",
                 "color": "#f59e0b",
             },
         )
@@ -26,7 +26,7 @@ class TestCategoryViews:
             "/api/categories/",
             {
                 "name": "Food",
-                "type": "expense",
+                "type": "EXPENSE",
             },
         )
         assert res.status_code == 400

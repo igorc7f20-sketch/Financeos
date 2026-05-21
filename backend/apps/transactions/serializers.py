@@ -19,8 +19,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class CategoryInputSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     type = serializers.ChoiceField(choices=Category.CategoryType.choices)
-    color = serializers.CharField(max_length=7, default="#6366f1")
-    icon = serializers.CharField(max_length=50, allow_blank=True, default="")
+    color = serializers.CharField(max_length=7, default="#6366f1", required=False)
+    icon = serializers.CharField(max_length=50, allow_blank=True, default="", required=False)
 
 
 class TransactionSerializer(serializers.ModelSerializer):

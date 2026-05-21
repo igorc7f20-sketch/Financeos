@@ -34,7 +34,7 @@ def expense_category(user):
     return Category.objects.create(
         user=user,
         name="Food",
-        type="expense",
+        type="EXPENSE",
     )
 
 
@@ -43,7 +43,7 @@ def income_category(user):
     return Category.objects.create(
         user=user,
         name="Salary",
-        type="income",
+        type="INCOME",
     )
 
 
