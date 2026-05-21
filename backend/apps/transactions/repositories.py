@@ -23,8 +23,8 @@ class CategoryRepository(BaseRepository):
         return cls.model.objects.filter(user=user, pk=pk).first()
 
     @classmethod
-    def exists_for_user(cls, user, **kwargs) -> Category:
-        return cls.model.objects.create(user=user, **kwargs)
+    def exists_for_user(cls, user, name: str, type: str) -> bool:
+        return cls.model.objects.filter(user=user, name=name, type=type).exists()
 
     @classmethod
     def create_for_user(cls, user, **kwargs) -> Category:
