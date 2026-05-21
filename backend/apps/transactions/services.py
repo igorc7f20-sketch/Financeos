@@ -24,7 +24,6 @@ class CategoryService:
             raise ServiceException(
                 f"Category '{name}' of type '{type}' already exists."
             )
-        
         return CategoryRepository.create_for_user(
             user, name=name, type=type, color=color, icon=icon
         )
