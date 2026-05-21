@@ -58,16 +58,21 @@ This project follows industry-standard engineering practices:
 - [x] CI/CD pipeline with GitHub Actions (lint → test → docker build)
 - [x] Swagger / OpenAPI documentation
 
-### 🚧 Layer 2 — Core Finance (in progress)
-- [ ] `Category` model with user ownership
-- [ ] `Transaction` model (income & expenses)
-- [ ] Full CRUD endpoints with filters, sorting, and pagination
-- [ ] Tests for all layers
+### ✅ Layer 2 — Core Finance (completed)
+- [x] `Category` model with user ownership and type (income/expense)
+- [x] `Transaction` model with amount, date, notes and category relation
+- [x] Full CRUD endpoints for transactions and categories
+- [x] Filters by type, category, date range and search
+- [x] Pagination on all list endpoints
+- [x] Category/transaction type mismatch validation
+- [x] Tests for all layers — models, services, views
 
-### 📊 Layer 3 — Dashboard & Reports
-- [ ] Monthly summary (balance, income, expenses)
-- [ ] Interactive charts
-- [ ] PDF / CSV export
+### 🚧 Layer 3 — Dashboard & Reports (in progress)
+- [ ] Monthly summary (balance, total income, total expenses)
+- [ ] Spending breakdown by category
+- [ ] Month-over-month evolution
+- [ ] CSV export
+- [ ] PDF export
 
 ### 🔔 Layer 4 — Rules & Intelligence
 - [ ] Spending rules per category (e.g. max 30% on leisure)
@@ -400,8 +405,8 @@ Interactive Swagger UI available at `/api/docs/` when running locally.
 ## 🗺️ Roadmap
 
 - [x] **Layer 1** — Project scaffold, Auth, Docker, CI/CD ✅
-- [ ] **Layer 2** — Transactions, Categories 🚧
-- [ ] **Layer 3** — Dashboard, Charts, Reports
+- [x] **Layer 2** — Transactions, Categories, Filters, Pagination ✅
+- [ ] **Layer 3** — Dashboard, Charts, Reports 🚧
 - [ ] **Layer 4** — Spending Rules, Goals, Alerts
 - [ ] **Layer 5** — Frontend React, Dark mode, Projections
 
@@ -425,6 +430,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-<div align="center">
-  Built with 💙 by <a href="https://github.com/your-username">your-username</a>
-</div>
+<div align="center"> Built with by <a href="https://github.com/igorc7f20-sketch">Igor Crisóstomo</a> </div>
