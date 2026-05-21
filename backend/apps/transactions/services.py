@@ -59,7 +59,7 @@ class TransactionService:
             category = CategoryRepository.get_by_user_and_id(user, data["category_id"])
             if not category:
                 raise ServiceException("Category not found.", status_code=404)
-            if category.type != data.get("type"):
+            if category.type.lower() != data["type"].lower():
                 raise ServiceException(
                     f"Category type '{category.type}' does not match "
                     f"transaction type '{data.get('type')}'."
