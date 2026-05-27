@@ -20,4 +20,5 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("api/", include("apps.transactions.urls")),
+    path("api/", include("apps.finance.urls")),
 ]
