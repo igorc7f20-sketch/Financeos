@@ -29,10 +29,12 @@ class CashEntryViewSet(viewsets.ViewSet):
         try:
             self.service.delete_entry(pk)
         except ObjectDoesNotExist:
-            return Response({"detail": "Entrada não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Entrada não encontrada."}, status=status.HTTP_404_NOT_FOUND
+            )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=False, methods=['get'], url_path='summary')
+    @action(detail=False, methods=["get"], url_path="summary")
     def summary(self, request):
         data = self.service.get_summary()
         serializer = CashSummarySerializer(data)

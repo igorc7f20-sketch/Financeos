@@ -5,8 +5,8 @@ from .models import CashEntry
 class CashEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = CashEntry
-        fields = ['id', 'type', 'amount', 'description', 'date', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        fields = ["id", "type", "amount", "description", "date", "created_at"]
+        read_only_fields = ["id", "created_at"]
 
     def validate_amount(self, value):
         if value <= 0:
