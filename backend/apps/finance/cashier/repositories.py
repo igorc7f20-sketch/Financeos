@@ -6,13 +6,13 @@ class CashEntryRepository:
 
     def list_all(self):
         return CashEntry.objects.all()
-    
+
     def create(self, data: dict) -> CashEntry:
         return CashEntry.objects.create(**data)
-    
+
     def get_by_id(self, entry_id: int) -> CashEntry:
         return CashEntry.objects.get(pk=entry_id)
-    
+
     def delete(self, entry: CashEntry) -> None:
         entry.delete()
 

@@ -12,7 +12,7 @@ class CashEntrySerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("O valor deve ser maior que zero.")
         return value
-    
+
 
 class CashSummarySerializer(serializers.Serializer):
     total_in = serializers.DecimalField(max_digits=12, decimal_places=2)
