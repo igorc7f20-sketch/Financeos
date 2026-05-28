@@ -1,72 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
-    /* -- Light mode -- */
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 222 47% 11%;
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --border: 214 32% 91%;
+  }
 
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
-
-        --primary: 243 75% 59%;
-        --primary-foreground: 0 0% 100%;
-
-        --secondary: 210 40% 96%;
-        --secondary-foreground: 222 47% 11%;
-
-        --muted: 210 40% 96%;
-        --muted-foreground: 215 47% 11%;
-
-        --accent: 210 40% 96%;
-        --accent-foreground: 222 47% 11%;
-
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 100%;
-
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
-        --ring: 243 75% 59%;
-
-        --radius: 0.5rem;
-    }
-
-    /* -- Dark mode -- */
-    .dark {
+  .dark {
     --background: 222 47% 7%;
     --foreground: 213 31% 91%;
-
-    --card: 222 47% 10%;
-    --card-foreground: 213 31% 91%;
-
-    --primary: 243 75% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 222 47% 15%;
-    --secondary-foreground: 213 31% 91%;
-
-    --muted: 222 47% 15%;
-    --muted-foreground: 215 16% 57%;
-
-    --accent: 222 47% 15%;
-    --accent-foreground: 213 31% 91%;
-
-    --destructive: 0 63% 50%;
-    --destructive-foreground: 0 0% 100%;
-
     --border: 222 47% 18%;
-    --input: 222 47% 18%;
-    --ring: 243 75% 65%;
   }
 
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
