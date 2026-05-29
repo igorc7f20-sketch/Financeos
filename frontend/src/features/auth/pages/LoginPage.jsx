@@ -67,7 +67,7 @@ export default function LoginPage() {
                                 required
                                 value={form.password}
                                 onChange={onChange}
-                                placeholder="••••••••"
+                                placeholder="Sua senha"
                                 className="w-full px-3 py-2 rounded-md border border-input bg-background
                                            text-foreground text-sm placeholder:text-muted-foreground
                                            focus:outline-none focus:ring-2 focus:ring-ring"

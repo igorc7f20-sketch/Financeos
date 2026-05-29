@@ -8,6 +8,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuthStore } from "@/shared/store/authStore";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuthStore();
@@ -27,7 +28,7 @@ export default function AppRoutes() {
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
       {/* Protected — dashboard será adicionado no próximo bloco */}
-      <Route path="/dashboard" element={<PrivateRoute><div className="p-8 text-foreground">Dashboard — em breve</div></PrivateRoute>} />
+      <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/login" replace />} />
