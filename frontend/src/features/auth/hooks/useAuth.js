@@ -18,12 +18,19 @@ export function useAuth() {
         setLoading(true);
         setError(null);
         try {
-            const { data: tokens } = await authApi.login({ email, password });
-            const { data: user } = await authApi.profile();
-            login(tokens, user);
+            const loginResponse = await authApi.login({ email, password });
+            console.log("LOGIN RESPONSE:", loginResponse);
+            console.log("LOGIN DATA:", loginResponse.data);
+
+            const tokens = loginResponse.data;
+            console.log("ACCESS TOKEN:", tokens.access);
+            console.log("REFRESH TOKEN:", tokens.refresh);
+
+            login(tokens, null);
             navigate("/dashboard");
-        } catch {
-            setError("E-mail ou senha inválidos.");
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("E-mail ou senha inválidas. Tente novamente.");
         } finally {
             setLoading(false);
         }
@@ -35,7 +42,8 @@ export function useAuth() {
         try {
             await authApi.register({ email, full_name, password });
             await handleLogin({ email, password });
-        } catch {
+        } catch (err) {
+            console.error("Register error:", err);
             setError("Erro ao criar conta. Tente novamente.");
         } finally {
             setLoading(false);

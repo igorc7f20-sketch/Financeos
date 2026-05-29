@@ -51,7 +51,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Cards placeholder */}
+        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-card border border-border rounded-lg p-5">
             <p className="text-sm text-muted-foreground">Saldo atual</p>
@@ -67,7 +67,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Next step notice */}
+        {/* Notice */}
         <div className="bg-card border border-border rounded-lg p-6 text-center">
           <p className="text-muted-foreground text-sm">
             🚧 Módulo de caixa em desenvolvimento — em breve você poderá

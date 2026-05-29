@@ -28,7 +28,9 @@ export default function AppRoutes() {
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
       {/* Protected — dashboard será adicionado no próximo bloco */}
-      <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+      <Route path="/dashboard" element={
+        <PrivateRoute><DashboardPage /></PrivateRoute>
+      } />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/login" replace />} />
