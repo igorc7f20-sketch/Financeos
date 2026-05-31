@@ -5,11 +5,13 @@
 import { useAuthStore } from "@/shared/store/authStore";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useTheme } from "@/shared/hooks/useTheme";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
   const { handleLogout } = useAuth();
   const { theme, toggle } = useTheme();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,6 +57,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-card border border-border rounded-lg p-5">
             <p className="text-sm text-muted-foreground">Saldo atual</p>
+            <button onClick={() => navigate("/cash")} className="...">Ir para o Caixa →</button>
             <p className="text-2xl font-bold text-foreground mt-1">R$ 0,00</p>
           </div>
           <div className="bg-card border border-border rounded-lg p-5">

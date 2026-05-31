@@ -9,6 +9,7 @@ import { useAuthStore } from "@/shared/store/authStore";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+import CashPage from "@/features/cash/pages/CashPage";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuthStore();
@@ -30,6 +31,10 @@ export default function AppRoutes() {
       {/* Protected — dashboard será adicionado no próximo bloco */}
       <Route path="/dashboard" element={
         <PrivateRoute><DashboardPage /></PrivateRoute>
+      } />
+      
+      <Route path="/cash" element={
+        <PrivateRoute><CashPage /></PrivateRoute>
       } />
 
       {/* Fallback */}
