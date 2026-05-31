@@ -1,16 +1,24 @@
 /**
  * DashboardPage — Page Layer
- * Main screen after login. Simple and functional MVP.
+ * Main screen after login. Shows real cash summary from API.
  */
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/store/authStore";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useTheme } from "@/shared/hooks/useTheme";
-import { useNavigate } from "react-router-dom";
+import { useDashboard } from "../hooks/useDashboard";
+
+const fmt = (value) =>
+  new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
   const { handleLogout } = useAuth();
   const { theme, toggle } = useTheme();
+  const { summary, loading } = useDashboard();
   const navigate = useNavigate();
 
   return (
@@ -27,9 +35,7 @@ export default function DashboardPage() {
             >
               {theme === "dark" ? "☀️ Claro" : "🌙 Escuro"}
             </button>
-            <span className="text-sm text-muted-foreground">
-              {user?.email}
-            </span>
+            <span className="text-sm text-muted-foreground">{user?.email}</span>
             <button
               onClick={handleLogout}
               className="text-sm text-destructive hover:opacity-80 transition-opacity"
@@ -49,33 +55,51 @@ export default function DashboardPage() {
             Olá, {user?.full_name?.split(" ")[0] || "usuário"} 👋
           </h2>
           <p className="text-muted-foreground mt-1">
-            Bem-vindo ao FinanceOS. O caixa está sendo construído.
+            Aqui está o resumo do seu caixa hoje.
           </p>
         </div>
 
-        {/* Cards */}
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-lg p-5">
-            <p className="text-sm text-muted-foreground">Saldo atual</p>
-            <button onClick={() => navigate("/cash")} className="...">Ir para o Caixa →</button>
-            <p className="text-2xl font-bold text-foreground mt-1">R$ 0,00</p>
+          <div className="bg-card border border-border rounded-xl p-5">
+            <p className="text-sm text-muted-foreground mb-1">Entradas</p>
+            <p className="text-2xl font-bold text-green-500">
+              {loading ? "..." : fmt(summary.totalIncome)}
+            </p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-5">
-            <p className="text-sm text-muted-foreground">Entradas hoje</p>
-            <p className="text-2xl font-bold text-foreground mt-1">R$ 0,00</p>
+          <div className="bg-card border border-border rounded-xl p-5">
+            <p className="text-sm text-muted-foreground mb-1">Saídas</p>
+            <p className="text-2xl font-bold text-red-500">
+              {loading ? "..." : fmt(summary.totalExpense)}
+            </p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-5">
-            <p className="text-sm text-muted-foreground">Saídas hoje</p>
-            <p className="text-2xl font-bold text-foreground mt-1">R$ 0,00</p>
+          <div className="bg-card border border-border rounded-xl p-5">
+            <p className="text-sm text-muted-foreground mb-1">Saldo atual</p>
+            <p className={`text-2xl font-bold ${
+              summary.balance >= 0 ? "text-foreground" : "text-red-500"
+            }`}>
+              {loading ? "..." : fmt(summary.balance)}
+            </p>
           </div>
         </div>
 
-        {/* Notice */}
-        <div className="bg-card border border-border rounded-lg p-6 text-center">
-          <p className="text-muted-foreground text-sm">
-            🚧 Módulo de caixa em desenvolvimento — em breve você poderá
-            registrar entradas, saídas e acompanhar o saldo em tempo real.
-          </p>
+        {/* Go to Cash */}
+        <div className="bg-card border border-border rounded-xl p-6 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-semibold text-foreground">
+              Controle de Caixa
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Registre entradas e saídas em tempo real.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/cash")}
+            className="px-5 py-2 bg-foreground text-background rounded-lg
+                       text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            Abrir Caixa →
+          </button>
         </div>
 
       </main>
