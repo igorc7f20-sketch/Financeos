@@ -51,7 +51,7 @@ export function useAuth() {
     };
 
     const handleLogout = () => {
-        LogOut();
+        Logout();
         navigate("/login");
     };
 
