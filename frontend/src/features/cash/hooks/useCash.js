@@ -53,7 +53,7 @@ export function useCash() {
                 date_from: appliedPeriod.dateFrom,
                 date_to: appliedPeriod.dateTo,
             };
-            const { data } = await cashApi.listMovements(params);
+            const { data } = await cashApi.listTransactions(params);
             setMovements(data.results || []);
             if (data.totals) {
                 setTotals({
@@ -88,7 +88,7 @@ export function useCash() {
     const addMovement = async ({ type, description, amount }) => {
         if (!description.trim() || !amount || parseFloat(amount) <= 0) return false;
         try {
-            await cashApi.createMovement({
+            await cashApi.createTransaction({
                 type,
                 description,
                 amount: parseFloat(amount),

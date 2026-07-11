@@ -5,6 +5,8 @@ Handles HTTP request/response only.
 All logic delegated to the service layer.
 """
 
+from decimal import Decimal
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -62,7 +64,16 @@ class CashMovementListCreateView(APIView):
         response = paginator.get_paginated_response(
             CashMovementSerializer(page, many=True).data
         )
-        response.data["totals"] = totals
+
+        normalized_totals = {}
+        for key, value in totals.items():
+            if isinstance(value, Decimal):
+                normalized_totals[key] = str(value.quantize(Decimal("0.01")))
+            elif isinstance(value, (int, float)):
+                normalized_totals[key] = f"{float(value):.2f}"
+            else:
+                normalized_totals[key] = value
+        response.data["totals"] = normalized_totals
         return response
     
     @extend_schema(

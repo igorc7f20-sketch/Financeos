@@ -13,7 +13,7 @@ const fmt = (value) =>
 
 export default function CashPage() {
   const {
-    transactions,
+    movements,
     loading,
     error,
     dateFrom,
@@ -48,7 +48,7 @@ export default function CashPage() {
   };
 
   const handleCardClick = (type) => {
-    setFilter(filter === type ? null : type);
+    setTypeFilter(typeFilter === type ? null : type);
   };
 
   const visibleMovements = typeFilter
@@ -80,7 +80,7 @@ export default function CashPage() {
           <button
             onClick={() => handleCardClick("income")}
             className={`text-left bg-card border rounded-xl p-5 transition-all hover:shadow-md ${
-              filter === "income"
+              typeFilter === "income"
                 ? "border-green-500 ring-2 ring-green-200"
                 : "border-border"
             }`}
@@ -96,7 +96,7 @@ export default function CashPage() {
           <button
             onClick={() => handleCardClick("expense")}
             className={`text-left bg-card border rounded-xl p-5 transition-all hover:shadow-md ${
-              filter === "expense"
+              typeFilter === "expense"
                 ? "border-red-500 ring-2 ring-red-200"
                 : "border-border"
             }`}
@@ -257,7 +257,7 @@ export default function CashPage() {
               {visibleMovements.map((m) => (
                 <li key={m.id} className="flex items-center justify-between py-3">
                   <div>
-                    <p className="text-sm font-medium text-foreground">{m.title}</p>
+                    <p className="text-sm font-medium text-foreground">{m.description}</p>
                     <p className="text-xs text-muted-foreground">{m.date}</p>
                   </div>
                   <span className={`text-sm font-semibold ${
