@@ -39,9 +39,9 @@ export function useCash() {
     const fetchStatus = useCallback(async () => {
         try {
             const { data } = await cashApi.getStatus();
-            setCurrentBalance(parseFloat(data.currentBalance));
+            setCurrentBalance(parseFloat(data.current_balance || 0));
         } catch {
-            // Status is secondaty; a failure here shouldn't block the list.
+            // Status is secondary; a failure here shouldn't block the list.
         }
     }, []);
 
