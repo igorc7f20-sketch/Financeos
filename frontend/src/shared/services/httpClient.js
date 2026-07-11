@@ -15,9 +15,12 @@ const http = axios.create({
   },
 });
 
+const getStoredAccessToken = () => localStorage.getItem('access_token') || localStorage.getItem('accessToken');
+const getStoredRefreshToken = () => localStorage.getItem('refresh_token') || localStorage.getItem('refreshToken');
+
 // --Request interceptor - inject access token--
 http.interceptors.request.use((config) => {
-    const token = localStorage.getItem('access_token');
+    const token = getStoredAccessToken();
     if (token) config.headers['Authorization'] = `Bearer ${token}`;
     return config;
 });
@@ -32,17 +35,20 @@ http.interceptors.response.use(
             original._retry = true;
 
             try {
-                const refresh = localStorage.getItem('refresh_token');
-                const { data } = await axios.post(`${BASE_URL}/auth/refresh/`, { 
+                const refresh = getStoredRefreshToken();
+                const { data } = await axios.post(`${BASE_URL}/auth/refresh/`, {
                     refresh,
                 });
 
+                localStorage.setItem('access_token', data.access);
                 localStorage.setItem('accessToken', data.access);
                 original.headers['Authorization'] = `Bearer ${data.access}`;
                 return http(original);
             } catch {
-                localStorage.removeItem('accessToken');
+                localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
                 window.location.href = '/login';
             }
         }

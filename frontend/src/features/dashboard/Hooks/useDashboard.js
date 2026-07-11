@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { cashApi } from '@/features/cash/api/cashApi';
 
-export const useDashboard = () => {
+export function useDashboard() {
     const [summary, setSummary] = useState({
         totalIncome: 0,
         totalExpense: 0,
@@ -17,7 +17,7 @@ export const useDashboard = () => {
         async function fetchSummary() {
             try {
                 const { data } = await cashApi.listTransactions({});
-                const transactions = data.results || data;
+                const transactions = Array.isArray(data) ? data : data.results || [];
 
                 const totalIncome = transactions
                     .filter((t) => t.type === 'income')

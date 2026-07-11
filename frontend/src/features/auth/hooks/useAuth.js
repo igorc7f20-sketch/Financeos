@@ -12,7 +12,7 @@ export function useAuth() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { login } = useAuthStore();
+    const { login, logout } = useAuthStore();
 
     const handleLogin = async ({ email, password }) => {
         setLoading(true);
@@ -51,7 +51,7 @@ export function useAuth() {
     };
 
     const handleLogout = () => {
-        Logout();
+        logout();
         navigate("/login");
     };
 

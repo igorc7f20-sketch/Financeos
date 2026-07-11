@@ -18,7 +18,8 @@ export function useCash() {
         try {
             const params = filters ? { type: filters } : {};
             const { data } = await cashApi.listTransactions(params);
-            setTransactions(data.results || data);
+            const transactions = Array.isArray(data) ? data : data.results || [];
+            setTransactions(transactions);
         } catch {
             setError("Erro ao carregar transações. Tente novamente.");
         } finally {

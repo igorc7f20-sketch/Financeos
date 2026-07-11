@@ -27,7 +27,7 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="border-b border-border bg-card px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <h1 className="text-lg font-bold text-foreground">FinanceOS</h1>
+          <h1 className="text-lg font-bold text-foreground">Rainha Modas</h1>
           <div className="flex items-center gap-4">
             <button
               onClick={toggle}
