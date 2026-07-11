@@ -2,16 +2,17 @@
 Base settings shared across all environments.
 """
 
-from pathlib import Path
-from decouple import AutoConfig, config
 from datetime import timedelta
+from pathlib import Path
+
+from decouple import AutoConfig
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-config = AutoConfig(search_path=BASE_DIR.parent)
+env_config = AutoConfig(search_path=BASE_DIR.parent)
 
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = env_config("SECRET_KEY")
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")
+ALLOWED_HOSTS = env_config("ALLOWED_HOSTS", default="localhost").split(",")
 
 # ─── Applications ────────────────────────────────────────────────────────────
 
@@ -78,11 +79,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST", default="127.0.0.1"),
-        "PORT": config("DB_PORT", default="5432"),
+        "NAME": env_config("DB_NAME"),
+        "USER": env_config("DB_USER"),
+        "PASSWORD": env_config("DB_PASSWORD"),
+        "HOST": env_config("DB_HOST", default="127.0.0.1"),
+        "PORT": env_config("DB_PORT", default="5432"),
     }
 }
 
@@ -129,10 +130,10 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
-        minutes=config("JWT_ACCESS_TOKEN_LIFETIME", default=5, cast=int)
+        minutes=env_config("JWT_ACCESS_TOKEN_LIFETIME", default=5, cast=int)
     ),
     "REFRESH_TOKEN_LIFETIME": timedelta(
-        minutes=config("JWT_REFRESH_TOKEN_LIFETIME", default=1440, cast=int)
+        minutes=env_config("JWT_REFRESH_TOKEN_LIFETIME", default=1440, cast=int)
     ),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,

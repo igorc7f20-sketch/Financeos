@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from django.utils import timezone
-from .models import CashBalance, CashMovement, CashClosing
+
+from .models import CashBalance, CashClosing, CashMovement
 
 
 class CashBalanceRepository:
@@ -8,7 +9,7 @@ class CashBalanceRepository:
     def get_or_create(user):
         balance, _ = CashBalance.objects.get_or_create(user=user)
         return balance
-    
+
 
 class CashMovementRepository:
     @staticmethod
@@ -26,22 +27,18 @@ class CashMovementRepository:
         if date:
             qs = qs.filter(date=date)
         return qs
-    
+
     @staticmethod
     def create(user, **data):
         return CashMovement.objects.create(user=user, **data)
-    
+
     @staticmethod
     def totals_for_date(user, date):
         qs = CashMovement.objects.filter(user=user, date=date)
 
-        income = qs.filter(type="income").aggregate(
-            total=Sum("amount")
-        )["total"] or 0
+        income = qs.filter(type="income").aggregate(total=Sum("amount"))["total"] or 0
 
-        expense = qs.filter(type="expense").aggregate(
-            total=Sum("amount")
-        )["total"] or 0
+        expense = qs.filter(type="expense").aggregate(total=Sum("amount"))["total"] or 0
 
         return income, expense
 

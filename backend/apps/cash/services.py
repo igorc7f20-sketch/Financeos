@@ -1,12 +1,15 @@
 from decimal import Decimal
+
 from django.db import transaction
 from django.utils import timezone
+
 from core.exceptions import ServiceException
+
 from .models import CashMovement
 from .repositories import (
     CashBalanceRepository,
-    CashMovementRepository,
     CashClosingRepository,
+    CashMovementRepository,
 )
 
 
@@ -27,8 +30,9 @@ class CashService:
 
     @staticmethod
     def today_movements(user):
-        return CashMovementRepository.list_history(user, date)
-    
+        today = timezone.localdate()
+        return CashMovementRepository.list_history(user, today)
+
     @staticmethod
     @transaction.atomic
     def create_movement(user, data):
@@ -36,7 +40,7 @@ class CashService:
 
         if amount <= 0:
             raise ServiceException("Amount must be greater than zero.")
-        
+
         movement_type = data["type"]
         balance = CashBalanceRepository.get_or_create(user)
 
@@ -48,17 +52,17 @@ class CashService:
 
         else:
             raise ServiceException("Invalid movement type.")
-        
+
         balance.save()
 
         return CashMovementRepository.create(
-            user=user, 
+            user=user,
             type=movement_type,
             description=data["description"],
             amount=amount,
             date=timezone.localdate(),
         )
-    
+
     @staticmethod
     @transaction.atomic
     def close_today(user):
@@ -73,7 +77,9 @@ class CashService:
         closing = CashClosingRepository.create(
             user=user,
             date=today,
-            opening_balance=balance.current_balance - Decimal(income) + Decimal(expense),
+            opening_balance=balance.current_balance
+            - Decimal(income)
+            + Decimal(expense),
             total_income=income,
             total_expense=expense,
             closing_balance=balance.current_balance,
