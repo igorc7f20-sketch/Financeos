@@ -54,12 +54,16 @@ class CashMovementListCreateView(APIView):
             movements = CashService.history(request.user, filter_serializer.validated_data)
         except ServiceException as e:
             return Response({"detail": e.message}, status=e.status_code)
-        
+
+        totals = CashService.history_totals(movements)
+
         paginator = StandardResultsPagination()
         page = paginator.paginate_queryset(movements, request)
-        return paginator.get_paginated_response(
+        response = paginator.get_paginated_response(
             CashMovementSerializer(page, many=True).data
         )
+        response.data["totals"] = totals
+        return response
     
     @extend_schema(
         request=CashMovementInputSerializer,

@@ -6,76 +6,113 @@
 import { useState, useEffect, useCallback } from "react";
 import { cashApi } from "../api/cashApi";
 
+function formatDate(date) {
+    return date.toISOString().split("T")[0]; // YYYY-MM-DD
+}
+
+function getDefaultPeriod() {
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    return {
+        dateFrom: formatDate(firstDayOfMonth),
+        dateTo: formatDate(today),
+    };
+}
+
 export function useCash() {
-    const [transactions, setTransactions] = useState([]);
+    const defaultPeriod = getDefaultPeriod();
+
+    // Inputs Shown in the date pickers
+    const [dateFrom, setDateFrom] = useState(defaultPeriod.dateFrom);
+    const [dateTo, setDateTo] = useState(defaultPeriod.dateTo);
+
+    // Period actually applied to the query (only changes on "Filtrar")
+    const [appliedPeriod, setAppliedPeriod] = useState(defaultPeriod);
+
+    const [movements, setMovements] = useState([]);
+    const [totals, setTotals] = useState({ income: 0, expense: 0, });
+    const [currentBalance, setCurrentBalance] = useState(0);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [filters, setFilters] = useState(null); // null | "income" | "expense"
+    
+    const fetchStatus = useCallback(async () => {
+        try {
+            const { data } = await cashApi.getStatus();
+            setCurrentBalance(parseFloat(data.currentBalance));
+        } catch {
+            // Status is secondaty; a failure here shouldn't block the list.
+        }
+    }, []);
 
-    const fetchTransactions = useCallback(async () => {
+    const fetchMovements = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
-            const params = filters ? { type: filters } : {};
-            const { data } = await cashApi.listTransactions(params);
-            const transactions = Array.isArray(data) ? data : data.results || [];
-            setTransactions(transactions);
+            const params = {
+                date_from: appliedPeriod.dateFrom,
+                date_to: appliedPeriod.dateTo,
+            };
+            const { data } = await cashApi.listMovements(params);
+            setMovements(data.results || []);
+            if (data.totals) {
+                setTotals({
+                    income: parseFloat(data.totals.income),
+                    expense: parseFloat(data.totals.expense),
+                });
+            }
         } catch {
-            setError("Erro ao carregar transações. Tente novamente.");
+            setError("Erro ao carregar movimentações. Tente novamente.");
         } finally {
             setLoading(false);
         }
-    }, [filters]);
+    }, [appliedPeriod]);
 
     useEffect(() => {
-        fetchTransactions();
-    }, [fetchTransactions]);
+        fetchStatus();
+        fetchMovements();
+    }, [fetchStatus, fetchMovements]);
 
-    const addTransaction = async ({ type, description, amount }) => {
+    function applyPeriodFilter() {
+        if (!dateFrom || !dateTo) {
+            setError("Informe a data inicial e a data final.");
+            return;
+        }
+        if (dateFrom > dateTo) {
+            setError("A data inicial não pode ser posterior à data final.");
+            return;
+        }
+        setAppliedPeriod({ dateFrom, dateTo });
+    }
+
+    const addMovement = async ({ type, description, amount }) => {
         if (!description.trim() || !amount || parseFloat(amount) <= 0) return false;
         try {
-            await cashApi.createTransaction({
-                title: description,
-                amount: parseFloat(amount),
+            await cashApi.createMovement({
                 type,
-                date: new Date().toISOString().split("T")[0],
+                description,
+                amount: parseFloat(amount),
             });
-            await fetchTransactions();
+            await Promise.all([fetchMovements(), fetchStatus()]);
             return true;
         } catch {
-            setError("Erro ao adicionar transação. Tente novamente.");
+            setError("Erro ao adicionar movimentação. Tente novamente.");
             return false;
         }
     };
 
-    // Totals computed from full list (no filters)
-    const [allTransactions, setAllTransactions] = useState([]);
-
-    useEffect(() => {
-        cashApi.listTransactions({}).then(({ data}) => {
-            setAllTransactions(data.results || data);
-        }).catch(() => {});
-    }, [transactions]);
-
-    const totalIncome = allTransactions
-        .filter((t) => t.type === "income")
-        .reduce((acc, t) => acc + parseFloat(t.amount), 0);
-
-    const totalExpense = allTransactions
-        .filter((t) => t.type === "expense")
-        .reduce((acc, t) => acc + parseFloat(t.amount), 0);
-
-    const balance = totalIncome - totalExpense;
-
     return {
-        transactions,
+        movements,
         loading,
         error,
-        filters,
-        setFilters,
-        addTransaction,
-        totalIncome,
-        totalExpense,
-        balance
+        dateFrom,
+        dateTo,
+        setDateFrom,
+        setDateTo,
+        applyPeriodFilter,
+        addMovement,
+        totalIncome: totals.income,
+        totalExpense: totals.expense,
+        currentBalance,
     };
 }

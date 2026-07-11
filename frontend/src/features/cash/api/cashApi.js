@@ -5,9 +5,11 @@
 import http from "@/shared/services/httpClient";
 
 export const cashApi = {
+    getStatus: () => http.get("/cash/status/"),
+    
     listTransactions: (params = {}) =>
-        http.get("/transactions/", { params }),
+        http.get("/cash/movements/", { params }),
 
     createTransaction: (data) =>
-        http.post("/transactions/", data),
+        http.post("/cash/movements/", data),
 };

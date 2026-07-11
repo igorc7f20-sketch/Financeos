@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import transaction
+from django.db.models import Sum
 from django.utils import timezone
 
 from core.exceptions import ServiceException
@@ -42,7 +43,7 @@ class CashService:
         if date_from > date_to:
             raise ServiceException("A data inicial não pode ser posterior à data final.")
         
-        return CashMovementRepository.list_history(user, date_from+date_from, date_to=date_to)
+        return CashMovementRepository.list_history(user, date_from=date_from, date_to=date_to)
 
     @staticmethod
     @transaction.atomic
@@ -99,3 +100,13 @@ class CashService:
         CashMovementRepository.archive_for_date(user, today)
 
         return closing
+    
+    @staticmethod
+    def history_totals(queryset):
+        income = queryset.filter(type="income").aggregate(total=Sum("amount"))["total"] or 0
+        expense = queryset.filter(type="expense").aggregate(total=Sum("amount"))["total"] or 0
+        return {
+            "income": income,
+            "expense": expense,
+            "balance": Decimal(income) - Decimal(expense),
+        }
