@@ -110,3 +110,42 @@ class CashService:
             "expense": expense,
             "balance": Decimal(income) - Decimal(expense),
         }
+
+    INCOME_PAYMENT_METHODS = {"dinheiro", "cartao", "parcela", "caixa", "boleto"}
+    EXPENSE_PAYMENT_METHODS = {"dinheiro", "cartao", "parcela", "caixa", "boleto"}
+
+    @staticmethod
+    @transaction.atomic
+    def create_movement(user, data):
+        amount = Decimal(str(data["amount"]))
+        if amount <= 0:
+            raise ServiceException("Amount must be greater than zero.")
+        
+        movement_type = data["type"]
+        payment_method = data.get("payment_method")
+
+        valid_methods = (
+            CashService.INCOME_PAYMENT_METHODS
+            if movement_type == CashMovement.MovementType.INCOME
+            else CashService.EXPENSE_PAYMENT_METHODS
+        )
+        if payment_method not in valid_methods:
+            raise ServiceException(
+                f"Invalid payment method '{payment_method}' for movement type '{movement_type}'."
+            )
+        
+        balance = CashBalanceRepository.get_or_create(user)
+        if movement_type == CashMovement.MovementType.INCOME:
+            balance.current_balance += amount
+        else:
+            balance.current_balance -= amount
+        balance.save()
+
+        return CashMovementRepository.create(
+            user=user,
+            type=movement_type,
+            payment_method=payment_method,
+            description=data["description"],
+            amount=amount,
+            date=timezone.localdate(),
+        )

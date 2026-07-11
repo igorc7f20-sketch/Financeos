@@ -10,7 +10,8 @@ from .models import CashMovement
 
 
 class CashMovementInputSerializer(serializers.ModelSerializer):
-    type = serializers.ChoiceField(choices=CashMovement.MovementType.choices)
+    type = serializers.ChoiceField(choices=["income", "expense"])
+    payment_method = serializers.ChoiceField(choices=CashMovement.PaymentMethod.choices)
     description = serializers.CharField(max_length=255)
     amount = serializers.DecimalField(max_digits=12, decimal_places=2)
 
@@ -22,7 +23,7 @@ class CashMovementInputSerializer(serializers.ModelSerializer):
 class CashMovementSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashMovement
-        fields = ["id", "type", "description", "amount", "date", "is_archived", "created_at"]
+        fields = ["id", "type", "payment_method", "description", "amount", "date", "is_archived", "created_at"]
         read_only_fields = fields
 
 

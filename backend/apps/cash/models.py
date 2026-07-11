@@ -24,6 +24,13 @@ class CashMovement(models.Model):
         INCOME = "income", "Income"
         EXPENSE = "expense", "Expense"
 
+    class PaymentMethod(models.TextChoices):
+        DINHEIRO = "dinheiro", "Dinheiro"
+        CARTAO = "cartao", "Cartão"
+        PARCELA = "parcela", "Parcela"
+        CAIXA = "caixa", "Caixa"
+        BOLETO = "boleto", "Boleto"
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -33,6 +40,7 @@ class CashMovement(models.Model):
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateField(db_index=True)
+    payment_method = models.CharField(max_length=20, choices=PaymentMethod.choices, null=True, blank=True)
     is_archived = models.BooleanField(default=False)
     archived_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
