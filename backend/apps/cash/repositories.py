@@ -22,10 +22,13 @@ class CashMovementRepository:
         )
 
     @staticmethod
-    def list_history(user, date=None):
+    def list_history(user, date_from=None, date_to=None):
         qs = CashMovement.objects.filter(user=user)
-        if date:
-            qs = qs.filter(date=date)
+
+        if date_from:
+            qs = qs.filter(date__gte=date_from)
+        if date_to:
+            qs = qs.filter(date__lte=date_to)
         return qs
 
     @staticmethod

@@ -31,7 +31,18 @@ class CashService:
     @staticmethod
     def today_movements(user):
         today = timezone.localdate()
-        return CashMovementRepository.list_history(user, today)
+        return CashMovementRepository.list_history(user, date_from=today, date_to=today)
+    
+    @staticmethod
+    def history(user, filters: dict):
+        today = timezone.localdate()
+        date_from = filters.get("date_from") or today.replace(day=1)
+        date_to = filters.get("date_to") or today
+
+        if date_from > date_to:
+            raise ServiceException("A data inicial não pode ser posterior à data final.")
+        
+        return CashMovementRepository.list_history(user, date_from+date_from, date_to=date_to)
 
     @staticmethod
     @transaction.atomic

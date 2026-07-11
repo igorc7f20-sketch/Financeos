@@ -1,0 +1,92 @@
+"""
+Cash Views - API Layer.
+
+Handles HTTP request/response only.
+All logic delegated to the service layer.
+"""
+
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from core.exceptions import ServiceException
+from core.pagination import StandardResultsPagination
+from .serializers import (
+    CashStatusSerializer,
+    CashMovementSerializer,
+    CashMovementInputSerializer,
+    CashHistoryFilterSerializer,
+)
+from .services import CashService
+
+
+class CashStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses={200: CashStatusSerializer},
+        summary="Get current cash status",
+        tags=["Cash"],
+    )
+    def get(self, request):
+        data = CashService.status(request.user)
+        return Response(CashStatusSerializer(data).data)
+
+
+class CashMovementListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("date_from", str, description="Filter from date (DD-MM-YYYY)"),
+            OpenApiParameter("date_to", str, description="Filter to date (DD-MM-YYYY)"),
+        ],
+        responses={200: CashMovementSerializer(many=True)},
+        summary="List cash movement history with period filter",
+        tags=["Cash"],
+    )
+    def get(self, request):
+        filter_serializer = CashHistoryFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        try:
+            movements = CashService.history(request.user, filter_serializer.validated_data)
+        except ServiceException as e:
+            return Response({"detail": e.message}, status=e.status_code)
+        
+        paginator = StandardResultsPagination()
+        page = paginator.paginate_queryset(movements, request)
+        return paginator.get_paginated_response(
+            CashMovementSerializer(page, many=True).data
+        )
+    
+    @extend_schema(
+        request=CashMovementInputSerializer,
+        responses={201: CashMovementSerializer},
+        summary="Create a new cash movement",
+        tags=["Cash"],
+    )
+    def post(self, request):
+        serializer = CashMovementInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            movement = CashService.create_movement(request.user, serializer.validated_data)
+        except ServiceException as e:
+            return Response({"detail": e.message}, status=e.status_code)
+        return Response(
+            CashMovementSerializer(movement).data,
+            status=status.HTTP_201_CREATED,
+        )
+    
+
+class CashCloseView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(summary="Close cash for today", tags=["Cash"])
+    def post(self, request):
+        try:
+            CashService.close_today(request.user)
+        except ServiceException as e:
+            return Response({"detail": e.message}, status=e.status_code)
+        return Response(status=status.HTTP_204_NO_CONTENT)
