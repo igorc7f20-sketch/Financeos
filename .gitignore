@@ -13,6 +13,10 @@ build/
 .env.*
 !.env.example
 
+# Databases
+*.sqlite3
+*.db
+
 # Node
 node_modules/
 .next/

@@ -34,7 +34,7 @@
 
 ## 📌 About the Project
 
-**FinanceOS** is a personal finance management system designed with a focus on clean architecture, maintainability, and scalability. The system provides a financial dashboard, spending rules, goal tracking, and reporting tools — all accessible via a REST API consumed by a modern SPA frontend.
+**FinanceOS** is a personal finance management system designed with a focus on clean architecture, maintainability, and scalability. The system provides a cash register flow, financial dashboard, spending rules, goal tracking, and reporting tools — all accessible via a REST API consumed by a modern SPA frontend.
 
 This project follows industry-standard engineering practices:
 
@@ -43,6 +43,7 @@ This project follows industry-standard engineering practices:
 - **Test-Driven mindset** — each layer is independently testable
 - **CI/CD** — automated linting, testing, and deployment on every push
 - **MVP-first, iterative delivery** — built in incremental, documented layers
+- **Product over Engineering** — behavior and usability drive new development, not structure ([ADR-001](docs/adr/ADR-001-product-over-engineering.md))
 
 ---
 
@@ -67,21 +68,31 @@ This project follows industry-standard engineering practices:
 - [x] Category/transaction type mismatch validation
 - [x] Tests for all layers — models, services, views
 
-### 🚧 Layer 3 — Dashboard & Reports (in progress)
-- [ ] Monthly summary (balance, total income, total expenses)
+### 🚧 Layer 3 — Cash Register MVP (in progress)
+- [x] React + Vite frontend scaffold
+- [x] Tailwind CSS + dark/light mode support
+- [x] HTTP client with JWT refresh interceptor
+- [x] Auth store (Zustand)
+- [x] Login and Register pages
+- [ ] Cash register open/close flow
+- [ ] Cash entries (income/expense)
+- [ ] Current balance view
+- [ ] Movement history with filters
+
+### 🔲 Layer 4 — Dashboard & Reports
+- [ ] Monthly summary (balance, income, expenses)
 - [ ] Spending breakdown by category
 - [ ] Month-over-month evolution
-- [ ] CSV export
-- [ ] PDF export
+- [ ] CSV / PDF export
 
-### 🔔 Layer 4 — Rules & Intelligence
-- [ ] Spending rules per category (e.g. max 30% on leisure)
+### 🔲 Layer 5 — Rules & Intelligence
+- [ ] Spending rules per category
 - [ ] Budget limit alerts
 - [ ] Financial goals with visual progress
 
-### 🎨 Layer 5 — Polish
-- [ ] React frontend scaffold (Vite)
-- [ ] Dark / Light mode
+### 🔲 Layer 6 — Polish & Observability
+- [ ] Structured logs and tracing
+- [ ] Health checks and metrics
 - [ ] Financial projections
 - [ ] Notifications system
 
@@ -406,9 +417,10 @@ Interactive Swagger UI available at `/api/docs/` when running locally.
 
 - [x] **Layer 1** — Project scaffold, Auth, Docker, CI/CD ✅
 - [x] **Layer 2** — Transactions, Categories, Filters, Pagination ✅
-- [ ] **Layer 3** — Dashboard, Charts, Reports 🚧
-- [ ] **Layer 4** — Spending Rules, Goals, Alerts
-- [ ] **Layer 5** — Frontend React, Dark mode, Projections
+- [ ] **Layer 3** — Cash Register MVP, Frontend Base 🚧
+- [ ] **Layer 4** — Dashboard, Charts, Reports
+- [ ] **Layer 5** — Spending Rules, Goals, Alerts
+- [ ] **Layer 6** — Polish, Observability, Projections
 
 ---
 
@@ -430,4 +442,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-<div align="center"> Built with by <a href="https://github.com/igorc7f20-sketch">Igor Crisóstomo</a> </div>
+<div align="center">
+  Built with 💙 by <a href="https://github.com/igorc7f20-sketch">Igor Crisóstomo</a>
+</div>
