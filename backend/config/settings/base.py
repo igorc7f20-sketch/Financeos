@@ -3,10 +3,11 @@ Base settings shared across all environments.
 """
 
 from pathlib import Path
-from decouple import config
+from decouple import AutoConfig, config
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+config = AutoConfig(search_path=BASE_DIR.parent)
 
 SECRET_KEY = config("SECRET_KEY")
 
@@ -33,6 +34,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.users",
     "apps.transactions",
+    "apps.dashboard",
+    "apps.cash",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
