@@ -90,6 +90,7 @@ export function useCash() {
         try {
             await cashApi.createTransaction({
                 type,
+                payment_method: paymentMethod,
                 description,
                 amount: parseFloat(amount),
             });

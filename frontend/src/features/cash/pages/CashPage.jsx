@@ -27,8 +27,23 @@ export default function CashPage() {
     currentBalance,
   } = useCash();
 
+  const PAYMENT_METHODS = {
+    income: [
+      { value: "dinheiro", label: "Dinheiro" },
+      { value: "cartao", label: "Cartão" },
+      { value: "parcela", label: "Recebimento de parcela" },
+    ],
+    expense: [
+      { value: "caixa", label: "Caixa" },
+      { value: "cartao", label: "Cartão" },
+      { value: "boleto", label: "Boleto" },
+    ],
+  };
+  
+  
   const [form, setForm] = useState({
     type: "income",
+    paymentMethod: "dinheiro",
     description: "",
     amount: "",
   });
@@ -37,8 +52,19 @@ export default function CashPage() {
   // Client-side filter over the already-loaded period, no extra request.
   const [typeFilter, setTypeFilter] = useState(null); // null | "income" | "expense"
 
-  const onChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const onChange = (e) => {
+    const { name, value} = e.target;
+    setForm((f) => {
+      if (name === "type") {
+        return {
+          ...f,
+          type: value,
+          paymentMethod: PAYMENT_METHODS[value][0].value, // reset to first option of the new type
+        };
+      }
+      return { ...f, [name]: value };
+    });
+  };
 
   const onSubmit = async () => {
     setAdding(true);
@@ -130,14 +156,15 @@ export default function CashPage() {
           </h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <select
-              name="type"
-              value={form.type}
+              name="paymentMethod"
+              value={form.paymentMethod}
               onChange={onChange}
               className="px-3 py-2 rounded-lg border border-input bg-background
                          text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
-              <option value="income">Entrada</option>
-              <option value="expense">Saída</option>
+              {PAYMENT_METHODS[form.type].map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
 
             <input

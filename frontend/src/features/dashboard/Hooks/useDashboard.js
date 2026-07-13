@@ -1,46 +1,47 @@
-/**
- * useDashboard - Hook Layer
- * Fetches summary data from the transactions API.
- */
-import { useState, useEffect } from 'react';
-import { cashApi } from '@/features/cash/api/cashApi';
+import { useState, useEffect } from "react";
+import { cashApi } from "@/features/cash/api/cashApi";
+import { dashboardApi } from "../api/dashboardApi";
+
+const emptyTotals = { income: 0, expense: 0 };
 
 export function useDashboard() {
-    const [summary, setSummary] = useState({
-        totalIncome: 0,
-        totalExpense: 0,
-        Balance: 0,
+    const [currentBalance, setCurrentBalance] = useState(0);
+    const [periodSummary, setPeriodSummary] = useState({
+        today: emptyTotals, week: emptyTotals, month: emptyTotals,
     });
+    const [incomeSeries, setIncomeSeries] = useState([]);
+    const [expenseSeries, setExpenseSeries] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchSummary() {
+        async function fetchAll() {
             try {
-                const { data } = await cashApi.listTransactions({});
-                const transactions = Array.isArray(data) ? data : data.results || [];
+                const [statusRes, summaryRes, incomeRes, expenseRes] = await Promise.all([
+                    cashApi.getStatus(),
+                    dashboardApi.getPeriodSummary(),
+                    dashboardApi.getMonthlyIncome(),
+                    dashboardApi.getMonthlyExpense(),
+                ]);
 
-                const totalIncome = transactions
-                    .filter((t) => t.type === 'income')
-                    .reduce((acc, t) => acc + parseFloat(t.amount), 0);
+                setCurrentBalance(parseFloat(statusRes.data.current_balance));
 
-                const totalExpense = transactions
-                    .filter((t) => t.type === 'expense')
-                    .reduce((acc, t) => acc + parseFloat(t.amount), 0);
-
-                setSummary({
-                    totalIncome,
-                    totalExpense,
-                    Balance: totalIncome - totalExpense,
+                const toNum = (t) => ({ income: parseFloat(t.income), expense: parseFloat(t.expense) });
+                setPeriodSummary({
+                    today: toNum(summaryRes.data.today),
+                    week: toNum(summaryRes.data.week),
+                    month: toNum(summaryRes.data.month),
                 });
+
+                setIncomeSeries(incomeRes.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
+                setExpenseSeries(expenseRes.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
             } catch {
-                // silently fail - dashboard shows zeros
+                // dashboard shows zeros on failure
             } finally {
                 setLoading(false);
             }
         }
-
-        fetchSummary();
+        fetchAll();
     }, []);
 
-    return { summary, loading };
+    return { currentBalance, periodSummary, incomeSeries, expenseSeries, loading };
 }
