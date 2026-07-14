@@ -19,14 +19,12 @@ export function useAuth() {
         setError(null);
         try {
             const loginResponse = await authApi.login({ email, password });
-            console.log("LOGIN RESPONSE:", loginResponse);
-            console.log("LOGIN DATA:", loginResponse.data);
+            const { access, refresh } = loginResponse.data;
 
-            const tokens = loginResponse.data;
-            console.log("ACCESS TOKEN:", tokens.access);
-            console.log("REFRESH TOKEN:", tokens.refresh);
+            const profileResponse = await authApi.profile();
+            const user = profileResponse.data;
 
-            login(tokens, null);
+            login({ access, refresh }, user);
             navigate("/dashboard");
         } catch (err) {
             console.error("Login error:", err);

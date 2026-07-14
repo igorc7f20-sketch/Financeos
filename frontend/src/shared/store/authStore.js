@@ -36,7 +36,7 @@ export const useAuthStore = create((set) => ({
         writeStorageItem("refresh_token", tokens.refresh);
         writeStorageItem("accessToken", tokens.access);
         writeStorageItem("refreshToken", tokens.refresh);
-        set({ user, isAuthenticated: true });
+        set({ user: user ?? null, isAuthenticated: true });
     },
 
     logout: () => {
