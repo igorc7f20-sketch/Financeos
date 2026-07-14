@@ -122,7 +122,7 @@ class CashService:
             raise ServiceException("Amount must be greater than zero.")
         
         movement_type = data["type"]
-        payment_method = data.get("payment_method")
+        payment_method = data.get("payment_method") or "dinheiro"
 
         valid_methods = (
             CashService.INCOME_PAYMENT_METHODS

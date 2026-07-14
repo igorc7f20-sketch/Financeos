@@ -11,13 +11,17 @@ from .models import CashMovement
 
 class CashMovementInputSerializer(serializers.ModelSerializer):
     type = serializers.ChoiceField(choices=["income", "expense"])
-    payment_method = serializers.ChoiceField(choices=CashMovement.PaymentMethod.choices)
+    payment_method = serializers.ChoiceField(
+        choices=CashMovement.PaymentMethod.choices,
+        required=False,
+        allow_null=True,
+    )
     description = serializers.CharField(max_length=255)
     amount = serializers.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         model = CashMovement
-        fields = ["type", "description", "amount"]
+        fields = ["type", "payment_method", "description", "amount"]
 
 
 class CashMovementSerializer(serializers.ModelSerializer):

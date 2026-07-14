@@ -85,12 +85,12 @@ export function useCash() {
         setAppliedPeriod({ dateFrom, dateTo });
     }
 
-    const addMovement = async ({ type, description, amount }) => {
+    const addMovement = async ({ type, paymentMethod, description, amount }) => {
         if (!description.trim() || !amount || parseFloat(amount) <= 0) return false;
         try {
             await cashApi.createTransaction({
                 type,
-                payment_method: paymentMethod,
+                payment_method: paymentMethod || "dinheiro",
                 description,
                 amount: parseFloat(amount),
             });
