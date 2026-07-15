@@ -15,7 +15,7 @@ export default function LoginPage() {
     const onChange = (e) =>
         setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         handleLogin(form);
     };
