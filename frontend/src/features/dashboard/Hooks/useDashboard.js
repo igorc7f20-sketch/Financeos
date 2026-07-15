@@ -15,30 +15,32 @@ export function useDashboard() {
 
     useEffect(() => {
         async function fetchAll() {
-            try {
-                const [statusRes, summaryRes, incomeRes, expenseRes] = await Promise.all([
-                    cashApi.getStatus(),
-                    dashboardApi.getPeriodSummary(),
-                    dashboardApi.getMonthlyIncome(),
-                    dashboardApi.getMonthlyExpense(),
-                ]);
+            const [statusRes, summaryRes, incomeRes, expenseRes] = await Promise.allSettled([
+                cashApi.getStatus(),
+                dashboardApi.getPeriodSummary(),
+                dashboardApi.getMonthlyIncome(),
+                dashboardApi.getMonthlyExpense(),
+            ]);
 
-                setCurrentBalance(parseFloat(statusRes.data.current_balance));
-
-                const toNum = (t) => ({ income: parseFloat(t.income), expense: parseFloat(t.expense) });
-                setPeriodSummary({
-                    today: toNum(summaryRes.data.today),
-                    week: toNum(summaryRes.data.week),
-                    month: toNum(summaryRes.data.month),
-                });
-
-                setIncomeSeries(incomeRes.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
-                setExpenseSeries(expenseRes.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
-            } catch {
-                // dashboard shows zeros on failure
-            } finally {
-                setLoading(false);
+            if (statusRes.status === "fulfilled") {
+                setCurrentBalance(parseFloat(statusRes.value.data.current_balance));
             }
+
+            if (summaryRes.status === "fulfilled") {
+                const toNum = (t) => ({ income: parseFloat(t.income), expense: parseFloat(t.expense) });
+                const d = summaryRes.value.data;
+                setPeriodSummary({ today: toNum(d.today), week: toNum(d.week), month: toNum(d.month) });
+            }
+
+            if (incomeRes.status === "fulfilled") {
+                setIncomeSeries(incomeRes.value.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
+            }
+
+            if (expenseRes.status === "fulfilled") {
+                setExpenseSeries(expenseRes.value.data.map((p) => ({ month: p.month, value: parseFloat(p.value) })));
+            }
+
+            setLoading(false);    
         }
         fetchAll();
     }, []);
