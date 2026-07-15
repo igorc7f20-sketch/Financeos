@@ -23,7 +23,7 @@ def _last_12_month_keys(reference: date) -> list[date]:
 
 class DashboardService:
     @staticmethod
-    def monthly_series(user, movement_type:str):
+    def monthly_series(user, movement_type: str):
         today = timezone.localdate()
         start_date = _first_day_months_ago(today, 11)
 
@@ -32,10 +32,10 @@ class DashboardService:
 
         return [
             {
-                "month": month_start.strftime("%m-%y"),
-                "total": totals_by_month.get(month, 0),
+                "month": month_start.strftime("%m/%y"),
+                "value": totals_by_month.get(month_start, 0),
             }
-            for month in _last_12_month_keys(today)
+            for month_start in _last_12_month_keys(today)
         ]
     
     @staticmethod
