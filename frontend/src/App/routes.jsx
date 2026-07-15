@@ -10,10 +10,12 @@ import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import CashPage from "@/features/cash/pages/CashPage";
+import AppLayout from "@/shared/components/AppLayout";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuthStore();
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <AppLayout>{children}</AppLayout>;
 }
 
 function PublicRoute({ children }) {
