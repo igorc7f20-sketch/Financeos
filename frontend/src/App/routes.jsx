@@ -11,6 +11,7 @@ import RegisterPage from "@/features/auth/pages/RegisterPage";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import CashPage from "@/features/cash/pages/CashPage";
 import AppLayout from "@/shared/components/AppLayout";
+import PayablesPage from "../features/payables/pages/PayablesPage";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuthStore();
@@ -41,6 +42,8 @@ export default function AppRoutes() {
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/login" replace />} />
+
+      <Route path="/payables" element={<PrivateRoute><PayablesPage /></PrivateRoute>} />
     </Routes>
   );
 }

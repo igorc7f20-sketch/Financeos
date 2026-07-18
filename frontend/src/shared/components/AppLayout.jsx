@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Wallet, LogOut, Sun, Moon } from "lucide-react";
+import { LayoutDashboard, Wallet, Receipt, LogOut, Sun, Moon } from "lucide-react";
 import { useAuthStore } from "@/shared/store/authStore";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useTheme } from "@/shared/hooks/useTheme";
@@ -7,6 +7,7 @@ import { useTheme } from "@/shared/hooks/useTheme";
 const NAV_ITEMS = [
     { to: "/dashboard", label: "Dashboard", incon: LayoutDashboard },
     { to: "/cash", label: "Caixa", incon: Wallet },
+    { to: "/payables", label: "Contas a Pagar", icon: Receipt },
 ];
 
 export default function AppLayout({ children }) {
