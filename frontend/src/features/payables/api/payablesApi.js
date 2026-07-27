@@ -14,5 +14,5 @@ export const payablesApi = {
         http.post("/payables/", data),
 
     markAsPaid: (installmentId) =>
-        http.post(`/payables/installments/${installmentId}/play/`),
+        http.post(`/payables/installments/${installmentId}/pay/`),
 }

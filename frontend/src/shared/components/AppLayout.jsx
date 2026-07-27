@@ -7,7 +7,7 @@ import { useTheme } from "@/shared/hooks/useTheme";
 const NAV_ITEMS = [
     { to: "/dashboard", label: "Dashboard", incon: LayoutDashboard },
     { to: "/cash", label: "Caixa", incon: Wallet },
-    { to: "/payables", label: "Contas a Pagar", icon: Receipt },
+    { to: "/payables", label: "Contas a Pagar", incon: Receipt },
 ];
 
 export default function AppLayout({ children }) {

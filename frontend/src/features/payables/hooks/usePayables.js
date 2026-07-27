@@ -53,7 +53,7 @@ export function usePayables() {
                 description,
                 total_amount: parseFloat(totalAmount),
                 installments_count: parseInt(installmentsCount, 10) || 1,
-                fist_due_date: firstDueDate,
+                first_due_date: firstDueDate,
             });
             await Promise.all([fetchInstallments(), fetchSummary()]);
             return true;
