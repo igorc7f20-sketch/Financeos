@@ -1,7 +1,7 @@
 from .models import Payable, PayableInstallment
 
 
-class PayblabeRepository:
+class PayableRepository:
     @staticmethod
     def create_payable(user, description, total_amount, installments_count):
         return Payable.objects.create(

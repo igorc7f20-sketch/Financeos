@@ -15,7 +15,7 @@ class PayableInstallment(models.Model):
         PENDING = "pending", "Pendente"
         PAID = "paid", "Pago"
 
-    payable = models.ForeignKey(Payable, on_delete=models.CASACADE, related_name="installments")
+    payable = models.ForeignKey(Payable, on_delete=models.CASCADE, related_name="installments")
     installment_number = models.PositiveIntegerField()
     due_date = models.DateField(db_index=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
